@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block style %}<link rel="stylesheet" href="{% static 'match/addInterests.css' %}">{% endblock %}
+
+{% block content %}
+    <h1>Add interests so you can match with people who have similar taste as you!</h1>
+    <form method="post">
+        {% csrf_token %}
+        {% for choice in choices %}
+            <input type="checkbox" name="{{choice}}">
+            <label>{{choice}}</label>
+            <br>
+        {% endfor %}
+    </form>
+{% endblock %}

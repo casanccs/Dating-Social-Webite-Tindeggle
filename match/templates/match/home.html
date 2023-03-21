@@ -3,6 +3,7 @@
 
 {% block content %}
     <a href="{% url 'logout' %}">Logout</a>
+    <a href="{% url 'addInterests' %}">Edit Interests</a>
     <h1>Welcome to Tindeggle</h1>
     <img id='img1' width='200' height='200' src="{{profile.ppic1.url}}">
     <p>{{profile.user.username}}</p>

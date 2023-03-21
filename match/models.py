@@ -13,11 +13,12 @@ class Profile(models.Model):
     ppic3 = models.ImageField(blank=True)
     ppic4 = models.ImageField(blank=True)
     ppic5 = models.ImageField(blank=True)
-    dob = models.DateField()
+    ppic6 = models.ImageField(blank=True)
+    dob = models.DateField(help_text="   Type exactly like: 'YYYY-MM-DD'")
     gender = models.CharField(choices=[('M', 'Male'), ('F','Female'), ('O', 'Other')], max_length=1)
 
 
-class Interests(models.Model):
+class Interest(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     choices = [
         ('Anime', 'Anime'),
@@ -63,11 +64,12 @@ class ProfileCreationForm2(ModelForm):
 class ProfileCreationForm3(ModelForm):
     class Meta:
         model = Profile
-        fields = ['ppic1', 'ppic2', 'ppic3', 'ppic4', 'ppic5']
+        fields = ['ppic1', 'ppic2', 'ppic3', 'ppic4', 'ppic5', 'ppic6']
         labels = {
             'ppic1': 'Choose Up To 5 Photos',
             'ppic2': '',
             'ppic3': '',
             'ppic4': '',
             'ppic5': '',
+            'ppic6': '',
         }

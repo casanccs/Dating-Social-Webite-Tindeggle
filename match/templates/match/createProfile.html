@@ -40,9 +40,8 @@
                 {% endfor %}
             </div>
             <div class="right">
+                <p>Add Up To 6 Photos: (At least 1 is required)</p>
                 {% for field in form3 %}
-                    {{field.label_tag}}
-                    <br>
                     {% if field.help_text %}
                         {{field.help_text}}
                         <br>
@@ -51,11 +50,19 @@
                         <span style="color: red;">{{field.errors}}</span>
                         <br>
                     {% endif %}
-                    {{field}}
-                    <br>
+                    <span class="fileButton">{{field}}</span>
                 {% endfor %}
+                <br>
+                <p>Your Uploaded Photos: </p>
+                <img id="upImage1">
+                <img id="upImage2">
+                <img id="upImage3">
+                <img id="upImage4">
+                <img id="upImage5">
+                <img id="upImage6">
             </div>
         </div>
             <input type="submit" value="Next" id="submit">
         </form>
+        <script src="{% static 'match/createProfile.js' %}"></script>
 {% endblock %}

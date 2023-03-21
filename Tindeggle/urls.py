@@ -24,4 +24,5 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('', HomeView, name='HomeView'),
     path('createProfile/', CreateProfileView, name='createProfile'),
+    path('addInterests/', AddInterestsView, name='addInterests'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

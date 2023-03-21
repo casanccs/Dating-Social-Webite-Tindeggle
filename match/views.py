@@ -39,9 +39,11 @@ def CreateProfileView(request):
                         profile.ppic4 = data3['ppic4']
                         if n>4:
                             profile.ppic5 = data3['ppic5']
+                            if n>5:
+                                profile.ppic5 = data3['ppic6']
             profile.save()
             login(request, user)
-            return HttpResponseRedirect(reverse('HomeView'))
+            return HttpResponseRedirect(reverse('addInterests'))
         else:
             context = {
                 'form1': form1,
@@ -59,3 +61,12 @@ def CreateProfileView(request):
             'form3': form3,
         }
     return render(request, 'match/createProfile.html', context)
+
+def AddInterestsView(request):
+    profile = Profile.objects.get(user=request.user)
+    choices = [ c[1] for c in Interest.interest.field.choices ]
+    context = {
+        'profile': profile,
+        'choices': choices,
+    }
+    return render(request, 'match/addInterests.html', context)
