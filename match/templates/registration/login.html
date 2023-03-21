@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block title %}Login{% endblock %}
+
+
+{% block style %}<link rel='stylesheet' href="{% static 'match/login.css' %}">{% endblock %}
+{% block content %}
+    <div class="loginBox">
+        <h1 class="loginHeader">Login To Start Socializing!</h1>
+        <span class='form' hidden>
+            {% for field in form %}
+                <p class="label">{{ field.label }}</p>
+                {{field}}
+            {% endfor %}
+        </span>
+    </div>
+
+    <script src="{% static 'match/login.js' %}"></script>
+{% endblock %}

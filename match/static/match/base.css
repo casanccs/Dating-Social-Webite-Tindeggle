@@ -1,0 +1,8 @@
+@font-face {
+    font-family: 'GlobalFont'; /*a name to be used later*/
+    src: url('Inter-VariableFont_slnt\,wght.ttf'); /*URL to font*/
+}
+
+body {
+    font-family: 'GlobalFont';
+}
