@@ -9,13 +9,21 @@
 {% block content %}
     <div class="loginBox">
         <h1 class="loginHeader">Login To Start Socializing!</h1>
-        <span class='form' hidden>
+        <form class='form' method="post" action="{% url 'login' %}" hidden>
+            {% csrf_token %}
             {% for field in form %}
                 <p class="label">{{ field.label }}</p>
                 {{field}}
             {% endfor %}
-        </span>
+            <br>
+            <div class="container">
+                <input class="checkbox" type="checkbox" name="toCheck" value="rememberMe">
+                <label class="rememberMe">Remember Me</label>
+            </div>
+            <input class="button" type="submit" value="Login">
+        </form>
+        <br>
+        <a href="{% url 'createProfile' %}" class="button" id="bottom" hidden>Create An Account</a>
     </div>
-
     <script src="{% static 'match/login.js' %}"></script>
 {% endblock %}

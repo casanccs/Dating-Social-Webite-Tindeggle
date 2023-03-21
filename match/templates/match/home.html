@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <a href="{% url 'logout' %}">Logout</a>
+    <h1>Welcome to Tindeggle</h1>
+    <img id='img1' width='200' height='200' src="{{profile.ppic1.url}}">
+    <p>{{profile.user.username}}</p>
+    <p>{{profile.user.first_name}} {{profile.user.last_name}}</p>
+    <p>{{profile.dob}}</p>
+    <p>{{profile.bio}}</p>
+{% endblock %}

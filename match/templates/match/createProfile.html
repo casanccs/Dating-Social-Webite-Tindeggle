@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block style %}<link rel="stylesheet" href="{% static 'match/createProfile.css' %}">{% endblock %}
+
+
+{% block content %}
+<h1 class="title">Account Creation</h1>
+        <div class="form">
+            <div class="left">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% for field in form1 %}
+                    <span class="labelTag">{{field.label_tag}}</span>
+                    <br>
+                    {% if field.help_text %}
+                        {{field.help_text}}
+                        <br>
+                    {% endif %}
+                    {% if field.errors %}
+                        <span style="color: red;">{{field.errors}}</span>
+                        <br>
+                    {% endif %}
+                    <span class="field">{{field}}</span>
+                    <br>
+                {% endfor %}
+                {% for field in form2 %}
+                    <span class="labelTag">{{field.label_tag}}</span>
+                    <br>
+                    {% if field.help_text %}
+                        {{field.help_text}}
+                        <br>
+                    {% endif %}
+                    {% if field.errors %}
+                        <span style="color: red;">{{field.errors}}</span>
+                        <br>
+                    {% endif %}
+                    <span class="field">{{field}}</span>
+                    <br>
+                {% endfor %}
+            </div>
+            <div class="right">
+                {% for field in form3 %}
+                    {{field.label_tag}}
+                    <br>
+                    {% if field.help_text %}
+                        {{field.help_text}}
+                        <br>
+                    {% endif %}
+                    {% if field.errors %}
+                        <span style="color: red;">{{field.errors}}</span>
+                        <br>
+                    {% endif %}
+                    {{field}}
+                    <br>
+                {% endfor %}
+            </div>
+        </div>
+            <input type="submit" value="Next" id="submit">
+        </form>
+{% endblock %}

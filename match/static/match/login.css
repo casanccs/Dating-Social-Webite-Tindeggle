@@ -2,7 +2,7 @@
     color: rgba(255, 255, 255, 0.9);
     text-align: center;
     margin-top: 40px;
-    margin-bottom: 40px;
+    margin-bottom: 25px;
     font-size: 40px;
     font-family: 'GlobalFont';
 }
@@ -15,7 +15,7 @@ body {
 .loginBox{
     position: relative;
     border: 3px solid white;
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: rgba(255, 255, 255, 0.2);
     border-radius: 15px;
     width: 700px;
     left: 50%;
@@ -27,11 +27,15 @@ body {
     color: rgba(255, 255, 255, 0.6);
     font-size: 20px;
     margin: 2px;
-    margin-left: 10px;
+    margin-left: 165px;
     margin-top: 20px;
+
 }
 
 #id_username{
+    position: relative;
+    left: 50%;
+    transform: translate(-50%);
     background-color: rgba(255, 255, 255, 0.2);
     border: 0px;
     font-size: 40px;
@@ -42,6 +46,9 @@ body {
 }
 
 #id_password{
+    position: relative;
+    left: 50%;
+    transform: translate(-50%);
     background-color: rgba(255, 255, 255, 0.2);
     border: 0px;
     font-size: 40px;
@@ -49,5 +56,51 @@ body {
     margin-left: 10px;
     margin-right: 20px;
     padding-left: 10px;
-    margin-bottom: 25px;
+    margin-bottom: 4px;
+}
+
+.rememberMe{
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 20px;
+}
+
+.checkbox{
+    background: rgba(255, 255, 255, 0.5);
+    height: 15px;
+    width: 15px;
+    margin-right: 10px;
+}
+
+
+.container {
+    display: flex;
+    align-items: center;
+    margin-left: 163px;
+}
+
+.button{
+    display: inline-block;
+    position: relative;
+    background-color: rgba(175, 175, 175, 0.5);
+    color: white;
+    width: 450px;
+    font-size: 25px;
+    border: 0.5px solid white;
+    border-radius: 3px;
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-top: 10px;
+    left: 50%;
+    transform: translate(-50%);
+}
+
+#bottom{
+    display: none;
+    margin-bottom: 20px;
+    text-decoration: none;
+}
+
+.button:hover, #bottom:hover{
+    text-decoration: underline;
 }
