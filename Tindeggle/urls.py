@@ -25,4 +25,6 @@ urlpatterns = [
     path('', HomeView, name='HomeView'),
     path('createProfile/', CreateProfileView, name='createProfile'),
     path('addInterests/', AddInterestsView, name='addInterests'),
+    path('editInterests/', EditInterestsView, name='editInterests'),
+    path('profileSearch/', ProfileSearchView, name='profileSearch'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

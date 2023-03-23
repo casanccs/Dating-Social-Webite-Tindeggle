@@ -4,13 +4,20 @@ from .models import *
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from datetime import date
+from django.http import JsonResponse
+import json
 # Create your views here.
 
 @login_required
 def HomeView(request):
     profile = Profile.objects.get(user=request.user)
+    profile.age = (date.today() - profile.dob).days//365
+    profile.save()
+    interests = Interest.objects.filter(profile=profile)
     context = {
         'profile': profile,
+        'interests': interests,
     }
     return render(request, 'match/home.html', context)
 
@@ -29,7 +36,8 @@ def CreateProfileView(request):
             user.last_name = data1['last_name']
             user.save()
             profile = Profile(user=user, bio=data2['bio'], 
-                              dob=data2['dob'], gender=data2['gender'])
+                              dob=data2['dob'], gender=data2['gender'],
+                              age=(date.today() - date(data2['dob'])).days//365)
             profile.ppic1 = data3['ppic1']
             if n>1:
                 profile.ppic2 = data3['ppic2']
@@ -64,9 +72,75 @@ def CreateProfileView(request):
 
 def AddInterestsView(request):
     profile = Profile.objects.get(user=request.user)
-    choices = [ c[1] for c in Interest.interest.field.choices ]
+    if request.method == "POST":
+        for choice in request.POST:
+            interest = Interest(profile=profile,interest=choice)
+            interest.save()
+        return HttpResponseRedirect(reverse('HomeView'))
+    choices = [ c[1] for c in Interest.interest.field.choices]
     context = {
         'profile': profile,
         'choices': choices,
     }
     return render(request, 'match/addInterests.html', context)
+
+def EditInterestsView(request):
+    profile = Profile.objects.get(user=request.user)
+    interests = Interest.objects.filter(profile=profile)
+    if request.method == 'POST':
+        interests.delete()
+        for choice in request.POST:
+            interest = Interest(profile=profile,interest=choice)
+            interest.save()
+        return HttpResponseRedirect(reverse('HomeView'))
+
+    interestsList = [i.interest for i in interests]
+    print(interestsList)
+    choices = [ c[1] for c in Interest.interest.field.choices]
+    print(choices)
+    context = {
+        'profile': profile,
+        'choices': choices,
+        'interests': interestsList,
+    }
+    return render(request, 'match/addInterests.html', context)
+
+def ProfileSearchView(request):
+    """
+    The idea here is that you look at every profile in the platform.
+    You can then "like"/"unlike" people while looking at all of their info.
+    You will have a list of people that you like, and list you unlike, and filter your search so
+        you can see only people you like, unlike, or have not seen yet.
+    There is an option to show only people who like you.
+    """
+    uprofile = Profile.objects.get(user=request.user)
+    profiles = Profile.objects.all()
+    relationships = Relationship.objects.filter(profileUser=uprofile)
+    likes = [ r.profileOther.user.username for r in relationships.filter(relationship="like")]
+    unlikes = [ r.profileOther.user.username for r in relationships.filter(relationship="unlike")]
+
+    for profile in profiles:
+        profile.age = (date.today() - profile.dob).days//365
+        profile.save()
+
+    if request.method == "POST":
+        profileOther = Profile.objects.get(user__username=request.POST['username'])
+        if request.POST['relationship'] == 'delete':
+            relationship = Relationship.objects.get(profileOther=profileOther)
+            relationship.delete()
+        else:
+            relationship = Relationship(profileUser=uprofile, profileOther=profileOther,
+                                        relationship=request.POST['relationship'])
+            relationship.save()
+        return JsonResponse({'profileUser': relationship.profileUser, 'profileOther': relationship.profileOther,
+                             'relationship': relationship.relationship})
+
+    context = {
+        'uprofile': uprofile,
+        'profiles': profiles,
+        'relationships': relationships,
+        'likes': likes,
+        'unlikes': unlikes,
+    }
+
+    return render(request, 'match/profileSearch.html', context)

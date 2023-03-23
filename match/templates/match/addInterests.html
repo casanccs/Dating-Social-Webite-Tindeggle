@@ -6,12 +6,40 @@
 
 {% block content %}
     <h1>Add interests so you can match with people who have similar taste as you!</h1>
+    
     <form method="post">
         {% csrf_token %}
-        {% for choice in choices %}
-            <input type="checkbox" name="{{choice}}">
-            <label>{{choice}}</label>
-            <br>
-        {% endfor %}
+        <div class="form">
+            <div class="choices">
+                <h2>Choose From:</h2>
+                {% for choice in choices %}
+                    {% if choice in interests %}
+                        
+                    {% else %}
+                    <div class="choice" id="{{choice}}_id">                        
+                        <input class="checkbox" type="checkbox" name="{{choice}}" hidden>
+                        <img class="checkImage" src="{% static 'match/addInterestX.png' %}">
+                        <label class="choiceLabel">{{choice}}</label>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <div class="chosen">
+                <h2>Choosen:</h2>
+                {% for choice in choices %}
+                    {% if choice in interests %}
+                        <div class="choice" id="{{choice}}_id">                        
+                            <input class="checkbox" type="checkbox" name="{{choice}}" hidden checked>
+                            <img class="checkImage" src="{% static 'match/addInterestX.png' %}">
+                            <label class="choiceLabel">{{choice}}</label>
+                        </div>
+                    {% else %}
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        <input id="button" type="submit" value="Create Interests">
     </form>
+
+    <script src="{% static 'match/addInterests.js' %}"></script>
 {% endblock %}

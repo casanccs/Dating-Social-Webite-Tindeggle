@@ -1,4 +1,64 @@
 body{
     background-image: url('addInterestsBackground.png');
     background-size: 100vw 100vh;
+    position: relative;
+}
+.form{
+    display: flex;
+    height: 80vh;
+}
+
+.choices{
+    display: flex;
+    flex-wrap: wrap;
+    width: 50%;
+    margin-right: 50px;
+    height: 50px;
+}
+.chosen{
+    display: flex;
+    flex-wrap: wrap;
+    width: 50%;
+    margin: 0px;
+    height: 50px;
+}
+
+.choice{
+    background-color: rgba(20,20,20, 0.6);
+    margin: 10px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    height: 50px;
+    border-radius: 10px;
+}
+
+.choiceLabel{
+    font-size: 45px;
+}
+
+
+.checkbox{
+    width: 25px;
+    height: 25px;
+    margin-right: 10px;
+    accent-color: rgba(150,150,150, 0.6);
+}
+
+.checkImage{
+    width: 20px;
+    height: 20px;
+    margin-right: 12px;
+}
+
+
+#button{
+    position: relative;
+    left: 50%;
+    transform: translate(-50%);
+    padding: 40px;
+    font-size: 50px;
+    background-color: rgba(217, 217, 217, 0.8);
+    border: 0;
+    border-radius: 20px;
 }

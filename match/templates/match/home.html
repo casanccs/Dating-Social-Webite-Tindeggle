@@ -3,11 +3,33 @@
 
 {% block content %}
     <a href="{% url 'logout' %}">Logout</a>
-    <a href="{% url 'addInterests' %}">Edit Interests</a>
+    <a href="{% url 'editInterests' %}">Edit Interests</a>
     <h1>Welcome to Tindeggle</h1>
+    <a href="{% url 'profileSearch' %}"><h2>Search for people Here</h2></a>
     <img id='img1' width='200' height='200' src="{{profile.ppic1.url}}">
+    {% if profile.ppic2 %}
+        <img id='img2' width='200' height='200' src="{{profile.ppic2.url}}">
+    {% endif %}
+    {% if profile.ppic3 %}
+        <img id='img3' width='200' height='200' src="{{profile.ppic3.url}}">
+    {% endif %}
+    {% if profile.ppic4 %}
+        <img id='img4' width='200' height='200' src="{{profile.ppic4.url}}">
+    {% endif %}
+    {% if profile.ppic5 %}
+        <img id='img5' width='200' height='200' src="{{profile.ppic5.url}}">
+    {% endif %}
+    {% if profile.ppic6 %}
+        <img id='img6' width='200' height='200' src="{{profile.ppic6.url}}">
+    {% endif %}
+
     <p>{{profile.user.username}}</p>
     <p>{{profile.user.first_name}} {{profile.user.last_name}}</p>
     <p>{{profile.dob}}</p>
+    <p>{{profile.age}}</p>
     <p>{{profile.bio}}</p>
+    {% for int in interests %}
+        <p>{{int.interest}}</p>
+    {% endfor %}
+
 {% endblock %}

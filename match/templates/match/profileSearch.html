@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block style %}<link rel="stylesheet" href="{% static 'match/profileSearch.css' %}">{% endblock %}
+
+{% block content %}
+    <h1>Profile Search</h1>
+    <form method="post">
+        {% csrf_token %}
+        <input type="search" name="search">
+        <select id="filter" name="filter">
+            <option value="all">View All Profiles</option>
+            <option value="likes">Your Likes</option>
+            <option value="unlikes">Your Unlikes</option>
+            <option value="unseen">Not Seen</option>
+            <option value="liked">Liked By</option>
+        </select>
+        <input type="submit" value="Search">
+    </form>
+
+    {% for profile in profiles %}
+        <div class="profile">
+            <img width="200" height="200" class="profilePic" src="{{profile.ppic1.url}}">
+            <div class="right">
+                <div class="small">
+                    <div>
+                        <h4>Username</h4>
+                        <h3 class="username">{{profile.user.username}}</h3>
+                    </div>
+                    <div>
+                        <h4>First Name</h4>
+                        <h3>{{profile.user.first_name}}</h3>
+                    </div>
+                    <div>
+                        <h4>Age</h4>
+                        <h3>{{profile.age}}</h3>
+                    </div>
+                    <div>
+                        <h4>Gender</h4>
+                        <h3>{{profile.gender}}</h3>
+                    </div>
+                </div>
+                <div class="bio">
+                    <p>{{profile.bio}}</p>
+                </div>
+            </div>
+            <div class="buttons">
+                <form method="post">
+                    {% csrf_token %}
+                    {% if profile.user.username in likes %}
+                        <div class="likeDiv" hidden>
+                            <input class='like' type="radio" value="like" name="{{profile.user.username}}" hidden>
+                            <label>Like</label>
+                        </div>
+                        <div class="unlikeDiv" hidden>
+                            <input class="unlike" type="radio" value="unlike" name="{{profile.user.username}}" hidden>
+                            <label>Not Like</label>
+                        </div>
+                        <div class="undoLike">
+                            <label>Undo Like</label>
+                        </div>
+                        <div class="undoNotLike" hidden>
+                            <label>Undo Not Like</label>
+                        </div>
+                    {% elif profile.user.username in unlikes %}
+                        <div class="likeDiv" hidden>
+                            <input class='like' type="radio" value="like" name="{{profile.user.username}}" hidden>
+                            <label>Like</label>
+                        </div>
+                        <div class="unlikeDiv" hidden>
+                            <input class="unlike" type="radio" value="unlike" name="{{profile.user.username}}" hidden>
+                            <label>Not Like</label>
+                        </div>
+                        <div class="undoLike" hidden>
+                            <label>Undo Like</label>
+                        </div>
+                        <div class="undoNotLike">
+                            <label>Undo Not Like</label>
+                        </div>
+                    {% else %}
+                        <div class="likeDiv">
+                            <input class='like' type="radio" value="like" name="{{profile.user.username}}" hidden>
+                            <label>Like</label>
+                        </div>
+                        <div class="unlikeDiv">
+                            <input class="unlike" type="radio" value="unlike" name="{{profile.user.username}}" hidden>
+                            <label>Not Like</label>
+                        </div>
+                        <div class="undoLike" hidden>
+                            <label>Undo Like</label>
+                        </div>
+                        <div class="undoNotLike" hidden>
+                            <label>Undo Not Like</label>
+                        </div>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+    {% endfor %}
+    <script src="{% static 'match/profileSearch.js' %}"></script>
+{% endblock %}

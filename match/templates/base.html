@@ -14,5 +14,10 @@
     {% block content %}
         
     {% endblock %}
+
+    <script>
+        var csrf_token = '{{ csrf_token }}';
+        var profileSearchUrl = "{% url 'profileSearch' %}";
+    </script>
 </body>
 </html>
