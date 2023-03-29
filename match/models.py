@@ -72,15 +72,18 @@ class Relationship(models.Model):
     profileOther = models.ForeignKey(Profile, related_name="profileOther", on_delete=models.CASCADE)
     choices = [
         ("like", "like"),
-        ("not like", "note like"),
+        ("not like", "not like"),
+        ("unseen", "unseen"),
     ]
-    relationship = models.CharField(blank=True, max_length=30, choices=choices)
+    relationship = models.CharField(blank=True, max_length=30, choices=choices, default="unseen")
 
     def __str__(self):
         if self.relationship == "like":
             return f"{self.profileUser.user.username} <3 => {self.profileOther.user.username}"
         else:
             return f"{self.profileUser.user.username} X => {self.profileOther.user.username}"
+
+
 
 
 ###############################################

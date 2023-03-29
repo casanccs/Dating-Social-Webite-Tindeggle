@@ -124,16 +124,48 @@ def ProfileSearchView(request):
         profile.save()
 
     if request.method == "POST":
-        profileOther = Profile.objects.get(user__username=request.POST['username'])
-        if request.POST['relationship'] == 'delete':
-            relationship = Relationship.objects.get(profileOther=profileOther)
-            relationship.delete()
-        else:
-            relationship = Relationship(profileUser=uprofile, profileOther=profileOther,
-                                        relationship=request.POST['relationship'])
-            relationship.save()
-        return JsonResponse({'profileUser': relationship.profileUser, 'profileOther': relationship.profileOther,
-                             'relationship': relationship.relationship})
+        try: #In this case, the user is trying to like/unlike someone
+            profileOther = Profile.objects.get(user__username=request.POST['username'])
+            if request.POST['relationship'] == 'delete':
+                relationship = Relationship.objects.get(profileOther=profileOther)
+                relationship.delete()
+            else:
+                relationship = Relationship(profileUser=uprofile, profileOther=profileOther,
+                                            relationship=request.POST['relationship'])
+                relationship.save()
+            return JsonResponse({'profileUser': relationship.profileUser, 'profileOther': relationship.profileOther,
+                                'relationship': relationship.relationship})
+        except: #In this case, the user is trying to search/filter their list
+            """
+            Let's say i have a profileUser already. And I want to get all relationships that associate with the profile:
+                relationships = Relationship.objects.filter(profileUser=profileUser)
+            Now we want to get all of the relationships in that QuerySet such that "relationship = 'like'"
+                relationships = relationships.filter(relationship='like')
+            Now we want to get all of the "profileOther" objects from the remaining relationships
+                relationships.profileOther
+            But now how do we combine the profiles that we filtered from the search: profiles, with the profiles that we-
+            -just got from relationships.profileOther?
+                profiles = relationships.profileOther & profiles  
+            """
+            form = request.POST
+            if form['search'] != "": 
+                profiles = profiles.filter(user__username__icontains=form['search'])
+            #In this case, either they are not searcing for a profile, or they are not, so we will filter further
+                crelationships = Relationship.objects.filter(profileUser=uprofile)
+            match form['filter']:
+                case "all": pass
+                case 'likes': 
+                    crelationships = crelationships.filter(relationship='like')
+                case 'unlikes':
+                    crelationships = crelationships.filter(relationship='not like')
+                case 'unseen':
+                    """
+                    I have all relationships that currently are associated with 'profileUser'. Now how do I find all-
+                    -profiles that are not "related" to profileUser?
+                        profiles = [profile for profile in allProfiles: if not profile in crelationships.profileOther: return profile]
+                    """
+                    #oprofiles = [profile for profile in allProfiles: if not profile in crelationships.profileOther: return profile]
+            profiles = crelationships.profileOther & profiles
 
     context = {
         'uprofile': uprofile,
