@@ -27,4 +27,6 @@ urlpatterns = [
     path('addInterests/', AddInterestsView, name='addInterests'),
     path('editInterests/', EditInterestsView, name='editInterests'),
     path('profileSearch/', ProfileSearchView, name='profileSearch'),
+    path('profileView/<str:username>/', ProfileView, name='profileView'),
+    path('chat/<str:username1>/<str:username2>/', ChatView, name='chatView'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

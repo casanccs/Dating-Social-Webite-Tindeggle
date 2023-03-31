@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <a href="{% url 'logout' %}">Logout</a>
+    <a href="{% url 'HomeView' %}">Home Page</a>
+    <h1>Chat</h1>
+    <h4>Chatting as: {{profile.user.username}}</h4>
+    <div class="mainGridCont">
+        <div id="videoCont">
+            <div>
+                <video id="localVideo" style="float:left;" autoplay playsinline></video>
+            </div>
+            <button id="toggleAudio">Audio Mute</button>
+            <button id="toggleVideo">Video Off</button>
+        </div>
+
+        <div id="chat">
+            <h3>CHAT</h3>
+            <div id="messages">
+                <ul id="msgList">
+                    {% for msg in messages %}
+                        
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div>
+                <input id="msg" type="text">
+                <button id="sendMsg">Send Message</button>
+            </div>
+
+            <button id="shareScreen">Share Screen</button>
+        </div>
+    </div>
+    <script>
+        const room_name = '{{room_name}}';
+        const uValue = '{{profile.user.username}}';
+    </script>
+    <script src="{% static 'match/chat.js' %}"></script>
+{% endblock %}

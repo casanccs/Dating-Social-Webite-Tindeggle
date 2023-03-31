@@ -5,3 +5,4 @@ from .models import *
 admin.site.register(Profile)
 admin.site.register(Interest)
 admin.site.register(Relationship)
+admin.site.register(Message)

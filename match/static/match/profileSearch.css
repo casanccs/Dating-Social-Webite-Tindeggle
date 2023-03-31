@@ -50,3 +50,20 @@
     transform: translate(-50%);
     white-space: nowrap;
 }
+
+.interests{
+    display: flex;
+}
+
+.interests p{
+    margin-right: 50px;
+    margin-left: 20px;
+}
+
+.same {
+    color: red;
+}
+
+.diff {
+    color: gray;
+}

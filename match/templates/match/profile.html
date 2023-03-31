@@ -5,9 +5,8 @@
 
 {% block content %}
     <a href="{% url 'logout' %}">Logout</a>
-    <a href="{% url 'editInterests' %}">Edit Interests</a>
-    <h1>Welcome to Tindeggle</h1>
-    <a href="{% url 'profileSearch' %}"><h2>Search for people Here</h2></a>
+    <a href="{% url 'HomeView' %}">Home Page</a>
+    <h1>{{profile.user.username}}</h1>
     <img id='img1' width='200' height='200' src="{{profile.ppic1.url}}">
     {% if profile.ppic2 %}
         <img id='img2' width='200' height='200' src="{{profile.ppic2.url}}">
@@ -24,8 +23,6 @@
     {% if profile.ppic6 %}
         <img id='img6' width='200' height='200' src="{{profile.ppic6.url}}">
     {% endif %}
-
-    <p>{{profile.user.username}}</p>
     <p>{{profile.user.first_name}} {{profile.user.last_name}}</p>
     <p>{{profile.dob}}</p>
     <p>{{profile.age}}</p>
@@ -36,5 +33,23 @@
             <p>{{int.interest}}</p>
         {% endfor %}
     </div>
+    <div class="startChat">
+        {% if toChat %}
+            <button>
+                Start Chat
+            </button>
+        {% else %}
+            <button disabled>
+                Start Chat
+            </button>
+        {% endif %}
+    </div>
+    <script>
+        let button = document.querySelector('button');
 
+        button.addEventListener('click', ()=>{
+            window.location.pathname = 'chat/' + "{{uprofile.user.username}}" + '/' + 
+                                        "{{profile.user.username}}" + '/'
+        })
+    </script>
 {% endblock %}

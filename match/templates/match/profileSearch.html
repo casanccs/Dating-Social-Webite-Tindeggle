@@ -5,6 +5,7 @@
 {% block style %}<link rel="stylesheet" href="{% static 'match/profileSearch.css' %}">{% endblock %}
 
 {% block content %}
+    <a href="{% url 'HomeView' %}">Home Page</a>
     <h1>Profile Search</h1>
     <form method="post">
         {% csrf_token %}
@@ -19,84 +20,119 @@
         <input type="submit" value="Search">
     </form>
 
-    {% for profile in profiles %}
-        <div class="profile">
-            <img width="200" height="200" class="profilePic" src="{{profile.ppic1.url}}">
-            <div class="right">
-                <div class="small">
-                    <div>
-                        <h4>Username</h4>
-                        <h3 class="username">{{profile.user.username}}</h3>
+    {% for profile in page_obj %}
+        {% if profile == uprofile %}
+        {% else %}
+            <div class="profile">
+                <a href="{% url 'profileView' profile.user.username %}"><img width="200" height="200" class="profilePic" src="{{profile.ppic1.url}}"></a>
+                <div class="right">
+                    <div class="small">
+                        <div>
+                            <h4>Username</h4>
+                            <h3 class="username">{{profile.user.username}}</h3>
+                        </div>
+                        <div>
+                            <h4>First Name</h4>
+                            <h3>{{profile.user.first_name}}</h3>
+                        </div>
+                        <div>
+                            <h4>Age</h4>
+                            <h3>{{profile.age}}</h3>
+                        </div>
+                        <div>
+                            <h4>Gender</h4>
+                            <h3>{{profile.gender}}</h3>
+                        </div>
                     </div>
-                    <div>
-                        <h4>First Name</h4>
-                        <h3>{{profile.user.first_name}}</h3>
+                    <div class="interests">
+                        <p>Interests:</p>
+                        {% for interest in profile.interest_set.all %}
+                            {% if interest.interest in uinterests %}
+                                <p class="same">{{ interest.interest }}</p>
+                            {% else %}
+                                <p class="diff">{{ interest.interest }}</p>
+                            {% endif %}
+                        {% empty %}
+                        {% endfor %}
                     </div>
-                    <div>
-                        <h4>Age</h4>
-                        <h3>{{profile.age}}</h3>
-                    </div>
-                    <div>
-                        <h4>Gender</h4>
-                        <h3>{{profile.gender}}</h3>
+                    <div class="bio">
+                        <p>{{profile.bio}}</p>
                     </div>
                 </div>
-                <div class="bio">
-                    <p>{{profile.bio}}</p>
+                <div class="buttons">
+                    <form method="post">
+                        {% csrf_token %}
+                        {% if profile.user.username in likes %}
+                            <div class="likeDiv" hidden>
+                                <input class='like' type="radio" value="like" name="{{profile.user.username}}" hidden>
+                                <label>Like</label>
+                            </div>
+                            <div class="unlikeDiv" hidden>
+                                <input class="unlike" type="radio" value="unlike" name="{{profile.user.username}}" hidden>
+                                <label>Not Like</label>
+                            </div>
+                            <div class="undoLike">
+                                <label>Undo Like</label>
+                            </div>
+                            <div class="undoNotLike" hidden>
+                                <label>Undo Not Like</label>
+                            </div>
+                        {% elif profile.user.username in unlikes %}
+                            <div class="likeDiv" hidden>
+                                <input class='like' type="radio" value="like" name="{{profile.user.username}}" hidden>
+                                <label>Like</label>
+                            </div>
+                            <div class="unlikeDiv" hidden>
+                                <input class="unlike" type="radio" value="unlike" name="{{profile.user.username}}" hidden>
+                                <label>Not Like</label>
+                            </div>
+                            <div class="undoLike" hidden>
+                                <label>Undo Like</label>
+                            </div>
+                            <div class="undoNotLike">
+                                <label>Undo Not Like</label>
+                            </div>
+                        {% else %}
+                            <div class="likeDiv">
+                                <input class='like' type="radio" value="like" name="{{profile.user.username}}" hidden>
+                                <label>Like</label>
+                            </div>
+                            <div class="unlikeDiv">
+                                <input class="unlike" type="radio" value="unlike" name="{{profile.user.username}}" hidden>
+                                <label>Not Like</label>
+                            </div>
+                            <div class="undoLike" hidden>
+                                <label>Undo Like</label>
+                            </div>
+                            <div class="undoNotLike" hidden>
+                                <label>Undo Not Like</label>
+                            </div>
+                        {% endif %}
+                    </form>
                 </div>
             </div>
-            <div class="buttons">
-                <form method="post">
-                    {% csrf_token %}
-                    {% if profile.user.username in likes %}
-                        <div class="likeDiv" hidden>
-                            <input class='like' type="radio" value="like" name="{{profile.user.username}}" hidden>
-                            <label>Like</label>
-                        </div>
-                        <div class="unlikeDiv" hidden>
-                            <input class="unlike" type="radio" value="unlike" name="{{profile.user.username}}" hidden>
-                            <label>Not Like</label>
-                        </div>
-                        <div class="undoLike">
-                            <label>Undo Like</label>
-                        </div>
-                        <div class="undoNotLike" hidden>
-                            <label>Undo Not Like</label>
-                        </div>
-                    {% elif profile.user.username in unlikes %}
-                        <div class="likeDiv" hidden>
-                            <input class='like' type="radio" value="like" name="{{profile.user.username}}" hidden>
-                            <label>Like</label>
-                        </div>
-                        <div class="unlikeDiv" hidden>
-                            <input class="unlike" type="radio" value="unlike" name="{{profile.user.username}}" hidden>
-                            <label>Not Like</label>
-                        </div>
-                        <div class="undoLike" hidden>
-                            <label>Undo Like</label>
-                        </div>
-                        <div class="undoNotLike">
-                            <label>Undo Not Like</label>
-                        </div>
-                    {% else %}
-                        <div class="likeDiv">
-                            <input class='like' type="radio" value="like" name="{{profile.user.username}}" hidden>
-                            <label>Like</label>
-                        </div>
-                        <div class="unlikeDiv">
-                            <input class="unlike" type="radio" value="unlike" name="{{profile.user.username}}" hidden>
-                            <label>Not Like</label>
-                        </div>
-                        <div class="undoLike" hidden>
-                            <label>Undo Like</label>
-                        </div>
-                        <div class="undoNotLike" hidden>
-                            <label>Undo Not Like</label>
-                        </div>
-                    {% endif %}
-                </form>
-            </div>
-        </div>
+        {% endif %}
     {% endfor %}
+
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+            {% endif %}
+    
+            <span class="current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+    
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+
+
     <script src="{% static 'match/profileSearch.js' %}"></script>
 {% endblock %}

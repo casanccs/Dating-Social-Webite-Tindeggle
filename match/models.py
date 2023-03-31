@@ -17,6 +17,7 @@ class Profile(models.Model):
     dob = models.DateField(help_text="   Type exactly like: 'YYYY-MM-DD'")
     gender = models.CharField(choices=[('M', 'Male'), ('F','Female'), ('O', 'Other')], max_length=1)
     age = models.IntegerField(default=0)
+    count = models.IntegerField(blank=True, default=0) #This field is not used for a "typical" usage
 
     def __str__(self):
         return self.user.username
@@ -73,9 +74,8 @@ class Relationship(models.Model):
     choices = [
         ("like", "like"),
         ("not like", "not like"),
-        ("unseen", "unseen"),
     ]
-    relationship = models.CharField(blank=True, max_length=30, choices=choices, default="unseen")
+    relationship = models.CharField(blank=True, max_length=30, choices=choices)
 
     def __str__(self):
         if self.relationship == "like":

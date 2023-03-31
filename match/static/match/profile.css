@@ -1,0 +1,9 @@
+.interests{
+    display: flex;
+}
+
+
+.interests p{
+    margin-right: 30px;
+    margin-left: 20px;
+}

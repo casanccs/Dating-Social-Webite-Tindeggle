@@ -1,0 +1,4 @@
+1. Big one is reverse query on "views.py" in the match statement.
+2. Some CSS stuff
+3. Fetch API
+4. 

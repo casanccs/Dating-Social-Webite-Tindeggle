@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from datetime import date
 from django.http import JsonResponse
 import json
+from django.core.paginator import Paginator
 # Create your views here.
 
 @login_required
@@ -20,6 +21,26 @@ def HomeView(request):
         'interests': interests,
     }
     return render(request, 'match/home.html', context)
+
+def ProfileView(request, username):
+    uprofile = Profile.objects.get(user=request.user)
+    profile = Profile.objects.get(user__username=username)
+    profile.age = (date.today() - profile.dob).days//365
+    profile.save()
+    interests = Interest.objects.filter(profile=profile)
+
+    relationship12 = Relationship.objects.filter(profileUser=uprofile).filter(profileOther=profile)
+    relationship21 = Relationship.objects.filter(profileUser=profile).filter(profileOther=uprofile)
+    toChat = False
+    if relationship12 and relationship21:
+        toChat = True
+    context = {
+        'profile': profile,
+        'interests': interests,
+        'uprofile': uprofile,
+        'toChat': toChat,
+    }
+    return render(request, 'match/profile.html', context)
 
 def CreateProfileView(request):
     if request.method == 'POST':
@@ -74,8 +95,9 @@ def AddInterestsView(request):
     profile = Profile.objects.get(user=request.user)
     if request.method == "POST":
         for choice in request.POST:
-            interest = Interest(profile=profile,interest=choice)
-            interest.save()
+            if choice != 'csrfmiddlewaretoken':
+                interest = Interest(profile=profile,interest=choice)
+                interest.save()
         return HttpResponseRedirect(reverse('HomeView'))
     choices = [ c[1] for c in Interest.interest.field.choices]
     context = {
@@ -90,8 +112,9 @@ def EditInterestsView(request):
     if request.method == 'POST':
         interests.delete()
         for choice in request.POST:
-            interest = Interest(profile=profile,interest=choice)
-            interest.save()
+             if choice != 'csrfmiddlewaretoken':
+                interest = Interest(profile=profile,interest=choice)
+                interest.save()
         return HttpResponseRedirect(reverse('HomeView'))
 
     interestsList = [i.interest for i in interests]
@@ -151,28 +174,73 @@ def ProfileSearchView(request):
             if form['search'] != "": 
                 profiles = profiles.filter(user__username__icontains=form['search'])
             #In this case, either they are not searcing for a profile, or they are not, so we will filter further
-                crelationships = Relationship.objects.filter(profileUser=uprofile)
+            crelationships = Relationship.objects.filter(profileUser=uprofile)
             match form['filter']:
                 case "all": pass
                 case 'likes': 
-                    crelationships = crelationships.filter(relationship='like')
+                    #crelationships = crelationships.filter(relationship='like')
+                    profilesC = Profile.objects.filter(profileOther__relationship='like').filter(profileOther__profileUser=uprofile)
+                    profiles = profilesC & profiles
                 case 'unlikes':
-                    crelationships = crelationships.filter(relationship='not like')
+                    #crelationships = crelationships.filter(relationship='not like')
+                    profilesC = Profile.objects.filter(profileOther__relationship='unlike').filter(profileOther__profileUser=uprofile)
+                    profiles = profilesC & profiles
                 case 'unseen':
                     """
                     I have all relationships that currently are associated with 'profileUser'. Now how do I find all-
                     -profiles that are not "related" to profileUser?
                         profiles = [profile for profile in allProfiles: if not profile in crelationships.profileOther: return profile]
+                    I tried creating an "unseen" relationship, but the issue is that when a new user creates an account, you would-
+                    -have to make ALL of the CURRENT users have a new relationship with that person.
+                    Instead we use the "difference" method:
                     """
-                    #oprofiles = [profile for profile in allProfiles: if not profile in crelationships.profileOther: return profile]
-            profiles = crelationships.profileOther & profiles
+                    profilesC = Profile.objects.all().difference(Profile.objects.filter(profileOther__profileUser=uprofile))
+                    profiles = profilesC & profiles
+                case 'liked':
+                    profiles = Profile.objects.filter(profileUser__relationship="like") & profiles
 
+    uinterests = [interest.interest for interest in uprofile.interest_set.all()]
+    count = 0
+    for profile in profiles:
+        for interest in profile.interest_set.all():
+            if interest.interest in uinterests:
+                count += 1
+        profile.count = count
+        profile.save()
+        count = 0
+    profiles = profiles.order_by('-count')
+
+    paginator = Paginator(profiles, 2) #Show only 20 profiles per
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
     context = {
         'uprofile': uprofile,
         'profiles': profiles,
         'relationships': relationships,
         'likes': likes,
         'unlikes': unlikes,
+        'uinterests': uinterests,
+        'page_obj': page_obj,
     }
 
     return render(request, 'match/profileSearch.html', context)
+
+def ChatView(request, username1, username2):
+    uprofile = Profile.objects.get(user=request.user)
+    if ChatRoom.objects.filter(room_name=username1+username2):
+        print("Chat room found!")
+        chatRoom = ChatRoom.objects.get(room_name=username1+username2)
+    elif ChatRoom.objects.filter(room_name=username2+username1):
+        print("Chat room found, usernames reversed!")
+        return HttpResponseRedirect(reverse('chatView', kwargs={'username1': username2, 'username2': username1}))
+    else: #Create chat room with username1 as the first one
+        chatRoom = ChatRoom(room_name=username1+username2)
+        chatRoom.save()
+        print("Chat room created!")
+    messages = Message.objects.filter(chatRoom=chatRoom)
+    context = {
+        'messages': messages,
+        'profile': uprofile,
+        'room_name': username1+username2,
+    }
+    return render(request, 'match/chat.html', context)

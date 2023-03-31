@@ -25,13 +25,14 @@ SECRET_KEY = 'django-insecure-r$!rbk(b$_&oa^#+yqhr6m)!p!5xz+!n61@ah*97a8#u4=fy4n
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['*']
+CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000/', 'https://*.ngrok.io/']
 
 # Application definition
 
 INSTALLED_APPS = [
     'match',
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -129,3 +130,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = 'HomeView'
 LOGIN_URL = 'login'
 LOGOUT_REDIRECT_URL = 'login'
+
+ASGI_APPLICATION = 'Tindeggle.asgi.application'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
