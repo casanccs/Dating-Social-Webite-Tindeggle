@@ -8,6 +8,7 @@
     <a href="{% url 'editInterests' %}">Edit Interests</a>
     <h1>Welcome to Tindeggle</h1>
     <a href="{% url 'profileSearch' %}"><h2>Search for people Here</h2></a>
+    <a href="{% url 'startChat' %}"><h2>Start Chatting with random people Here</h2></a>
     <img id='img1' width='200' height='200' src="{{profile.ppic1.url}}">
     {% if profile.ppic2 %}
         <img id='img2' width='200' height='200' src="{{profile.ppic2.url}}">

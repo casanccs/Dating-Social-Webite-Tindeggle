@@ -1,0 +1,11 @@
+#videos{
+    display: flex;
+    width: 300px;
+}
+
+#videos video{
+    margin: 20px;
+    background-color: white;
+    width: 100%;
+    border: 2px solid white;
+}

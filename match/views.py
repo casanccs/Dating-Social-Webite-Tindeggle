@@ -128,6 +128,28 @@ def EditInterestsView(request):
     }
     return render(request, 'match/addInterests.html', context)
 
+def ChatView(request, username1, username2):
+    uprofile = Profile.objects.get(user=request.user)
+    if ChatRoom.objects.filter(room_name=username1+username2):
+        print("Chat room found!")
+        chatRoom = ChatRoom.objects.get(room_name=username1+username2)
+    elif ChatRoom.objects.filter(room_name=username2+username1):
+        print("Chat room found, usernames reversed!")
+        return HttpResponseRedirect(reverse('chatView', kwargs={'username1': username2, 'username2': username1}))
+    else: #Create chat room with username1 as the first one
+        chatRoom = ChatRoom(room_name=username1+username2)
+        chatRoom.save()
+        print("Chat room created!")
+    messages = Message.objects.filter(chatRoom=chatRoom)
+    ousername = username1 if uprofile.user.username != username1 else username2
+    context = {
+        'messages': messages,
+        'profile': uprofile,
+        'ousername': ousername, 
+        'room_name': username1+username2,
+    }
+    return render(request, 'match/chat.html', context)
+
 def ProfileSearchView(request):
     """
     The idea here is that you look at every profile in the platform.
@@ -225,22 +247,21 @@ def ProfileSearchView(request):
 
     return render(request, 'match/profileSearch.html', context)
 
-def ChatView(request, username1, username2):
+def StartChatView(request):
     uprofile = Profile.objects.get(user=request.user)
-    if ChatRoom.objects.filter(room_name=username1+username2):
-        print("Chat room found!")
-        chatRoom = ChatRoom.objects.get(room_name=username1+username2)
-    elif ChatRoom.objects.filter(room_name=username2+username1):
-        print("Chat room found, usernames reversed!")
-        return HttpResponseRedirect(reverse('chatView', kwargs={'username1': username2, 'username2': username1}))
-    else: #Create chat room with username1 as the first one
-        chatRoom = ChatRoom(room_name=username1+username2)
-        chatRoom.save()
-        print("Chat room created!")
-    messages = Message.objects.filter(chatRoom=chatRoom)
     context = {
-        'messages': messages,
-        'profile': uprofile,
-        'room_name': username1+username2,
+        'uprofile': uprofile,
     }
-    return render(request, 'match/chat.html', context)
+    if request.method == "POST":
+        form = request.POST
+        return HttpResponseRedirect(reverse('RandomChat', kwargs={'num': form['num'], 
+        'min': form['min'], 'max': form['max'], 'prio': form['prio']}))
+    return render(request, 'match/startChat.html', context)
+
+def RandomChatView(request, num, min, max, prio):
+    
+    context = {
+
+    }
+
+    return render(request, 'match/randomChat.html', context)

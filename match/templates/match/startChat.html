@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block style %}<link rel="stylesheet" href="{% static 'match/startChat.css' %}">{% endblock %}
+
+{% block content %}
+    <a href="{% url 'logout' %}">Logout</a>
+    <h1>Start Chatting!</h1>
+    <h3>Settings:</h3>
+    <form method="post">
+        {% csrf_token %}
+        <label>Group or 1-on-1:</label>
+            <br>
+            <input type="radio" value="one" name="num" checked><label>1-on-1</label>
+            <br>
+            <input type="radio" value="group" name="num"><label>Group</label>
+            <br>
+            <br>
+        <label>Age Range (in years):</label>
+            <div class="range_container">
+                <div class="sliders_control">
+                    <input id="fromSlider" type="range" value="10" min="0" max="100"/>
+                    <input id="toSlider" type="range" value="40" min="0" max="100"/>
+                </div>
+                <div class="form_control">
+                    <div class="form_control_container">
+                        <div class="form_control_container__time">Min</div>
+                        <input class="form_control_container__time__input" type="number" id="fromInput" value="10" min="0" max="100" name="min" />
+                    </div>
+                    <div class="form_control_container">
+                        <div class="form_control_container__time">Max</div>
+                        <input class="form_control_container__time__input" type="number" id="toInput" value="40" min="0" max="100" name="max"/>
+                    </div>
+                </div>
+            </div>
+        <label>Similar Interests get prioritized or not:</label>
+            <br>
+            <input type="radio" value="prio" name="prio" checked><label>Prioritized</label>
+            <br>
+            <input type="radio" value="not" name="prio"><label>Not Prioritized</label>
+            <br>
+            <br>
+        <input type="submit" value="Search">
+    </form>
+
+    <script src="{% static 'match/startChat.js' %}"></script>
+{% endblock %}

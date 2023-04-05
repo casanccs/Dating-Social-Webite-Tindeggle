@@ -20,9 +20,26 @@ class DMConsumer(WebsocketConsumer):
 
     def receive(self, text_data):
         receiveDict = json.loads(text_data)
-        message = receiveDict['message']
         action = receiveDict['action']
-
+        
+        if action == 'new-message':
+            msg = Message(content=receiveDict['message']['text-content'], profile=self.profile, chatRoom=self.chatRoom)
+            msg.save()
+            message = f'[{msg.time}] ({msg.profile.user.username}): {msg.content}'
+            receiveDict['message']['text-content'] = message
+            print(msg.time)
+            #receiver_channel_name = receiveDict['message']['receiver_channel_name']
+            #receiveDict['message']['receiver_channel_name'] = self.channel_name
+            async_to_sync(self.channel_layer.group_send)(
+                self.room_group_name,
+                {
+                    'type': 'send_message',
+                    'receive_dict': receiveDict
+                }
+            )
+            #This time, it sends the JSON BUT with ['message']['text-content']
+            return
+            
         if (action == 'new-offer') or (action == 'new-answer'):
             receiver_channel_name = receiveDict['message']['receiver_channel_name']
             receiveDict['message']['receiver_channel_name'] = self.channel_name
@@ -30,25 +47,20 @@ class DMConsumer(WebsocketConsumer):
             async_to_sync(self.channel_layer.send)(
                 receiver_channel_name,
                 {
-                    'type': 'send.sdp',
+                    'type': 'send_message',
                     'receive_dict': receiveDict
                 }
             )
             return
         receiveDict['message']['receiver_channel_name'] = self.channel_name
-        #Do stuff with message
-        msg = Message(content=message, profile=self.profile, chatRoom=self.chatRoom)
-        print(message)
-        msg.save()
-
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
             {
-                'type': 'send.sdp',
+                'type': 'send_message',
                 'receive_dict': receiveDict
             }
         )
 
-    def send_sdp(self, event):
+    def send_message(self, event):
         receiveDict = event['receive_dict']
         self.send(text_data=json.dumps(receiveDict))
