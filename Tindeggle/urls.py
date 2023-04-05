@@ -30,5 +30,5 @@ urlpatterns = [
     path('profileView/<str:username>/', ProfileView, name='profileView'),
     path('chat/<str:username1>/<str:username2>/', ChatView, name='chatView'),
     path('startChat/', StartChatView, name='startChat'),
-    path('randomChat/<str:num>/<int:min>/<int:max>/<str:prio>/', RandomChatView, name='RandomChat'),
+    path('randomChat/', RandomChatView, name='RandomChat'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

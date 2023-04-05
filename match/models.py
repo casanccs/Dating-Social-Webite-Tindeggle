@@ -56,6 +56,15 @@ class ChatRoom(models.Model):
 
     def __str__(self):
         return self.room_name
+    
+class GroupChatRoom(models.Model):
+    #id will be the identifier
+    num = models.CharField(max_length=100)
+    mini = models.IntegerField()
+    maxi = models.IntegerField()
+    prio = models.CharField(max_length=100)
+    npart = models.IntegerField()
+    interest = models.CharField(max_length=100, blank=True)
 
 class Participant(models.Model):
     chatRoom = models.ForeignKey(ChatRoom, on_delete=models.CASCADE)
@@ -64,9 +73,9 @@ class Participant(models.Model):
 class Message(models.Model):
     content = models.CharField(max_length=300, blank=True)
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE,default=None)
-    chatRoom = models.ForeignKey(ChatRoom, on_delete=models.CASCADE,default=None)
+    chatRoom = models.ForeignKey(ChatRoom, on_delete=models.CASCADE,default=None, blank=True, null=True)
+    groupChatRoom = models.ForeignKey(GroupChatRoom, on_delete=models.CASCADE, blank=True, null=True, default=None)
     time = models.DateTimeField(auto_now_add=True)
-
 
 class Relationship(models.Model):
     profileUser = models.ForeignKey(Profile, related_name="profileUser", on_delete=models.CASCADE)

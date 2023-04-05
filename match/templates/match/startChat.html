@@ -35,9 +35,14 @@
             </div>
         <label>Similar Interests get prioritized or not:</label>
             <br>
-            <input type="radio" value="prio" name="prio" checked><label>Prioritized</label>
+            <input class="prio" type="radio" value="prio" name="prio"><label>Prioritized</label>
+            <input class="not" type="radio" value="not" name="prio" checked><label>Not Prioritized</label>
             <br>
-            <input type="radio" value="not" name="prio"><label>Not Prioritized</label>
+            <div class="interests" hidden>
+                {% for interest in interests %}
+                    <input type="radio" value="{{interest.interest}}" name="interest" checked><label>{{interest.interest}}</label>
+                {% endfor %}
+            </div>
             <br>
             <br>
         <input type="submit" value="Search">

@@ -249,16 +249,38 @@ def ProfileSearchView(request):
 
 def StartChatView(request):
     uprofile = Profile.objects.get(user=request.user)
+    interests = Interest.objects.filter(profile=uprofile)
     context = {
         'uprofile': uprofile,
+        'interests': interests,
     }
     if request.method == "POST":
         form = request.POST
-        return HttpResponseRedirect(reverse('RandomChat', kwargs={'num': form['num'], 
-        'min': form['min'], 'max': form['max'], 'prio': form['prio']}))
+        """
+        Once the user presses "StartChatView", they will do these steps:
+        1. Find out if there is an available room that fits these settings
+        2. If there is, change the url and join that one
+        3. If there is none, create the room that others can join
+        """
+        #This will see if there is an available room
+        chatRooms = GroupChatRoom.objects.filter(num=form['num']) #Finds rooms that are either 1-on-1 or group
+        if chatRooms: #There are rooms with their 'num' selection
+            if form['prio'] == 'prio': #The person is looking for a room whose GroupChat.interest is what they put
+                chatRooms = chatRooms.filter(interest=form['interest'])
+                if chatRooms: #There are rooms that have this interest
+                    pass
+                    #We need to check for age now
+                    
+                else: #There are rooms that don't have this interest
+                    pass
+
+        else: #There is not an available room
+            #Create room and "join" it by changing the url 
+            chatRoom = GroupChatRoom(num=form['num'], mini=form['min'], maxi=form['max'], prio=form['prio'], npart=1)
+        return HttpResponseRedirect(reverse('RandomChat', kwargs={'id': chatRoom.id}))
     return render(request, 'match/startChat.html', context)
 
-def RandomChatView(request, num, min, max, prio):
+def RandomChatView(request):
     
     context = {
 
