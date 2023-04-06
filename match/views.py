@@ -247,6 +247,11 @@ def ProfileSearchView(request):
 
     return render(request, 'match/profileSearch.html', context)
 
+
+from django.db.models import Count
+from django.db.models import Max
+from django.db.models import Min
+from random import randint
 def StartChatView(request):
     uprofile = Profile.objects.get(user=request.user)
     interests = Interest.objects.filter(profile=uprofile)
@@ -262,28 +267,52 @@ def StartChatView(request):
         2. If there is, change the url and join that one
         3. If there is none, create the room that others can join
         """
-        #This will see if there is an available room
+        #Here we will try to find rooms that match their "1on1" or "group" option, and see if there are any available
         chatRooms = GroupChatRoom.objects.filter(num=form['num']) #Finds rooms that are either 1-on-1 or group
+        count = 5 if form['num'] == 'group' else 2
+        chatRooms = chatRooms.annotate(participant_count=Count('participant')) #annotates number of participants in each chatRoom
+        chatRooms = chatRooms.filter(participant_count__lt=count)
         if chatRooms: #There are rooms with their 'num' selection
+            #At this point, we have all rooms that match the correct participant limit
             if form['prio'] == 'prio': #The person is looking for a room whose GroupChat.interest is what they put
                 chatRooms = chatRooms.filter(interest=form['interest'])
-                if chatRooms: #There are rooms that have this interest
-                    pass
-                    #We need to check for age now
-                    
-                else: #There are rooms that don't have this interest
-                    pass
-
+            if chatRooms: #This is after either a filter from an interest, or not filtering
+                #We must filter from age now
+                """
+                I want to get a new chatRooms QuerySet.
+                There are two different approaches that are possible here:
+                    1. The QuerySet contains chatRooms where all participants are aged: 
+                            form['min'] <= profile.age <= form['max']
+                    2. Get chatRooms where the:
+                        form['min'] <= chatRoom.mini and chatRoom.maxi <= form['max']
+                        If your age does not fall within range, you will not be allowed in.
+                    The second method is easier to implement
+                """
+                chatRooms = chatRooms.filter(mini__gt=form['min']).chatRooms.filter(maxi__lt=form['max'])
+                if chatRooms:
+                    chatRoom = chatRooms[randint(0,chatRooms.count()-1)]
+                else:
+                    chatRoom = GroupChatRoom(num=form['num'], mini=form['min'], maxi=form['max'], prio=form['prio'], interest=form['interest'], npart=0)
+            else: #could not find any chat rooms with this prio
+                chatRoom = GroupChatRoom(num=form['num'], mini=form['min'], maxi=form['max'], prio=form['prio'], interest=form['interest'], npart=0)
         else: #There is not an available room
-            #Create room and "join" it by changing the url 
-            chatRoom = GroupChatRoom(num=form['num'], mini=form['min'], maxi=form['max'], prio=form['prio'], npart=1)
-        return HttpResponseRedirect(reverse('RandomChat', kwargs={'id': chatRoom.id}))
+            chatRoom = GroupChatRoom(num=form['num'], mini=form['min'], maxi=form['max'], prio=form['prio'], interest=form['interest'], npart=0)
+        #Now I need to add the profile to the chatRoom using a Participant object
+        Participant(profile=uprofile, groupChatRoom=chatRoom).save()
+        return HttpResponseRedirect(reverse('RandomChat', kwargs={'id': chatRoom.id})) #Sends you to the chatRoom
+    
     return render(request, 'match/startChat.html', context)
 
-def RandomChatView(request):
-    
+def RandomChatView(request, id):
+    uprofile = Profile.objects.get(user=request.user)
+    chatRoom = GroupChatRoom.objects.get(id=id)
+    oprofiles = [p.profile for p in Participant.objects.filter(groupChatRoom=chatRoom)]
+    messages = Message.objects.filter(groupChatRoom=chatRoom)
     context = {
-
+        'profile': uprofile,
+        'oprofiles': oprofiles,
+        'messages': messages,
+        'chatRoom': chatRoom,
+        'room_id': id,
     }
-
     return render(request, 'match/randomChat.html', context)

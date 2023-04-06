@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block style %}<link rel="stylesheet" href="{% static 'match/chat.css' %}">{% endblock %}
+{% block style %}<link rel="stylesheet" href="{% static 'match/randomChat.css' %}">{% endblock %}
 
 {% block content %}
     <a href="{% url 'logout' %}">Logout</a>
@@ -9,7 +9,7 @@
     <h1>Chat</h1>
     <h4>Chatting as: {{profile.user.username}}</h4>
     <h4>Chatting with: {{ousername}}</h4>
-    <p id='room_name' hidden>{{ room_name }}</p>
+    <p id='room_id' hidden>{{ room_id }}</p>
     <p id="uValue" hidden>{{profile.user.username}}</p>
     <div id="videos">
         <video id="userVideo" autoplay playsinline></video>
@@ -20,5 +20,5 @@
     {% for msg in messages %}
         <p>[{{msg.time}}] ({{msg.profile.user.username}}): {{ msg.content }}</p>
     {% endfor %}
-    <script src="{% static 'match/chat.js' %}"></script>
+    <script src="{% static 'match/randomChat.js' %}"></script>
 {% endblock %}

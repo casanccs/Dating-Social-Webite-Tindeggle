@@ -63,11 +63,12 @@ class GroupChatRoom(models.Model):
     mini = models.IntegerField()
     maxi = models.IntegerField()
     prio = models.CharField(max_length=100)
-    npart = models.IntegerField()
-    interest = models.CharField(max_length=100, blank=True)
+    npart = models.IntegerField() #number of participants
+    interest = models.CharField(max_length=100, blank=True, null=True)
 
 class Participant(models.Model):
-    chatRoom = models.ForeignKey(ChatRoom, on_delete=models.CASCADE)
+    chatRoom = models.ForeignKey(ChatRoom, on_delete=models.CASCADE, blank=True, default=None, null=True)
+    groupChatRoom = models.ForeignKey(GroupChatRoom, on_delete=models.CASCADE, blank=True, default=None, null=True)
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
 
 class Message(models.Model):
