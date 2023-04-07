@@ -20,5 +20,7 @@
     {% for msg in messages %}
         <p>[{{msg.time}}] ({{msg.profile.user.username}}): {{ msg.content }}</p>
     {% endfor %}
-    <script src="{% static 'match/randomChat.js' %}"></script>
+    <script src="{% static 'match/randomChat.js' %}">
+        var homeUrl = "{% url 'HomeView' %}";
+    </script>
 {% endblock %}

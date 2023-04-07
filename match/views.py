@@ -288,17 +288,23 @@ def StartChatView(request):
                         If your age does not fall within range, you will not be allowed in.
                     The second method is easier to implement
                 """
-                chatRooms = chatRooms.filter(mini__gt=form['min']).chatRooms.filter(maxi__lt=form['max'])
+                chatRooms = chatRooms.filter(mini__gte=form['min']).filter(maxi__lte=form['max'])
                 if chatRooms:
                     chatRoom = chatRooms[randint(0,chatRooms.count()-1)]
+                    print("Joined Room!")
                 else:
                     chatRoom = GroupChatRoom(num=form['num'], mini=form['min'], maxi=form['max'], prio=form['prio'], interest=form['interest'], npart=0)
+                    chatRoom.save()
+                    print("New Room!")
             else: #could not find any chat rooms with this prio
                 chatRoom = GroupChatRoom(num=form['num'], mini=form['min'], maxi=form['max'], prio=form['prio'], interest=form['interest'], npart=0)
+                chatRoom.save()
+                print("New Room!")
         else: #There is not an available room
             chatRoom = GroupChatRoom(num=form['num'], mini=form['min'], maxi=form['max'], prio=form['prio'], interest=form['interest'], npart=0)
-        #Now I need to add the profile to the chatRoom using a Participant object
-        Participant(profile=uprofile, groupChatRoom=chatRoom).save()
+            chatRoom.save()
+            print("New Room!")
+
         return HttpResponseRedirect(reverse('RandomChat', kwargs={'id': chatRoom.id})) #Sends you to the chatRoom
     
     return render(request, 'match/startChat.html', context)
@@ -315,4 +321,15 @@ def RandomChatView(request, id):
         'chatRoom': chatRoom,
         'room_id': id,
     }
+    #CREATE PARTICIPANT HERE INSTEAD
+    if request.method == "GET":
+        Participant(profile=uprofile, groupChatRoom=chatRoom).save()
+        print('New Participant')
+    if request.method == "POST":
+        print("I am leaving")
+        Participant.objects.filter(profile=uprofile).get(groupChatRoom=chatRoom).delete()
+        print("Deleted Participant")
+        if chatRoom.participant_set.count() == 0:
+            chatRoom.delete()
+
     return render(request, 'match/randomChat.html', context)
