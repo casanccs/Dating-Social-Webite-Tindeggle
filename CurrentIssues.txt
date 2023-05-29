@@ -1,5 +1,0 @@
-1. Age updates for a user only when that specific enters the home page, there should be a script
-    that automatically runs everyday that updates EVERYONES age dynamically.
-2. Sort by having the people who are most "similar" to you first. (Example found in test.py)
-
-
