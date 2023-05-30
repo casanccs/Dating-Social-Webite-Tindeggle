@@ -11,6 +11,16 @@
     {% block style %}{% endblock %}
 </head>
 <body>
+    {% block nav %}
+    <div class="Navbar">
+        <a href="{% url 'HomeView' %}"><h1>Tindeggle</h1></a>
+        <a href="{% url 'profileSearch' %}" id="search"><i>SEARCH</i></a>
+        <a href="{% url 'startChat' %}" id="chat"><i>CHAT</i></a>
+        <a href="{% url 'editInterests' %}" id="edit"><i>EDIT INTERESTS</i></a>
+        <a href="{% url 'logout' %}" id="logout"><i>LOGOUT</i></a>
+    </div>
+    {% endblock nav %}
+
     {% block content %}
         
     {% endblock %}

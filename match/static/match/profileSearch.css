@@ -39,8 +39,10 @@
     position: relative;
     width: 280px;
     height: 50px;
-    background-color: grey;
+    background-color: rgb(129, 23, 182);
     margin: 10px;
+    color: white;
+    border-radius: 6px;
 }
 
 .buttons label{
@@ -53,6 +55,7 @@
 
 .interests{
     display: flex;
+    align-items: center;
 }
 
 .interests p{
@@ -61,9 +64,15 @@
 }
 
 .same {
-    color: red;
+    color: white;
+    background-color: rgb(129, 23, 182);
+    padding: 10px;
+    border-radius: 5px;
 }
 
 .diff {
-    color: gray;
+    color: white;
+    background-color: rgb(47, 47, 47);
+    padding: 10px;
+    border-radius: 5px;
 }

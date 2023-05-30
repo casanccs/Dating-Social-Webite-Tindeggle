@@ -1,11 +1,52 @@
 #videos{
     display: flex;
-    width: 300px;
+    flex-wrap: wrap;
+    align-items: center;
 }
 
 #videos video{
     margin: 20px;
     background-color: white;
-    width: 100%;
     border: 2px solid white;
+}
+
+.type{
+    font-size: 30px;
+}
+
+.type input{
+    font-size: 30px;
+}
+
+#userVideo{
+    width: 20%;
+}
+
+#remoteVideo{
+    width: 100%;
+}
+
+.main{
+    display: flex;
+    margin-top: 10px;
+}
+
+.left{
+    width: 50vw;
+}
+
+.right{
+    width: 50vw;
+}
+
+.chat{
+    height: 85vh;
+    background-color: white;
+}
+
+.message{
+    font-size: 20px;
+    padding-top: 10px;
+    margin: 0px;
+    margin-left: 10px;
 }

@@ -7,6 +7,7 @@ import json
 class DMConsumer(WebsocketConsumer):
     def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
+        print("In connect with: ", self.room_name)
         self.room_group_name = f'dm_{self.room_name}'
         async_to_sync(self.channel_layer.group_add)(self.room_group_name, self.channel_name )
         self.user = self.scope['user']

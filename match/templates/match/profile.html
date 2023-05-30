@@ -4,35 +4,6 @@
 {% block style %}<link rel="stylesheet" href="{% static 'match/profile.css' %}">{% endblock %}
 
 {% block content %}
-    <a href="{% url 'logout' %}">Logout</a>
-    <a href="{% url 'HomeView' %}">Home Page</a>
-    <h1>{{profile.user.username}}</h1>
-    <img id='img1' width='200' height='200' src="{{profile.ppic1.url}}">
-    {% if profile.ppic2 %}
-        <img id='img2' width='200' height='200' src="{{profile.ppic2.url}}">
-    {% endif %}
-    {% if profile.ppic3 %}
-        <img id='img3' width='200' height='200' src="{{profile.ppic3.url}}">
-    {% endif %}
-    {% if profile.ppic4 %}
-        <img id='img4' width='200' height='200' src="{{profile.ppic4.url}}">
-    {% endif %}
-    {% if profile.ppic5 %}
-        <img id='img5' width='200' height='200' src="{{profile.ppic5.url}}">
-    {% endif %}
-    {% if profile.ppic6 %}
-        <img id='img6' width='200' height='200' src="{{profile.ppic6.url}}">
-    {% endif %}
-    <p>{{profile.user.first_name}} {{profile.user.last_name}}</p>
-    <p>{{profile.dob}}</p>
-    <p>{{profile.age}}</p>
-    <p>{{profile.bio}}</p>
-    <div class="interests">
-        <p>Interests: </p>
-        {% for int in interests %}
-            <p>{{int.interest}}</p>
-        {% endfor %}
-    </div>
     <div class="startChat">
         {% if toChat %}
             <button>
@@ -43,6 +14,39 @@
                 Start Chat
             </button>
         {% endif %}
+    </div>
+    <div class="area">
+        <div class="left">
+            <img id='img1' src="{{profile.ppic1.url}}">
+            {% if profile.ppic2 %}
+                <img id='img2' src="{{profile.ppic2.url}}">
+            {% endif %}
+            {% if profile.ppic3 %}
+                <img id='img3' src="{{profile.ppic3.url}}">
+            {% endif %}
+            {% if profile.ppic4 %}
+                <img id='img4' src="{{profile.ppic4.url}}">
+            {% endif %}
+            {% if profile.ppic5 %}
+                <img id='img5' src="{{profile.ppic5.url}}">
+            {% endif %}
+            {% if profile.ppic6 %}
+                <img id='img6' src="{{profile.ppic6.url}}">
+            {% endif %}
+        </div>
+        <div class="right">
+            <p><b>Username:</b> {{profile.user.username}}</p>
+            <p><b>Name:</b> {{profile.user.first_name}} {{profile.user.last_name}}</p>
+            <p><b>Birthday:</b> {{profile.dob}}</p>
+            <p><b>Age:</b> {{profile.age}}</p>
+            <p><b>Bio:</b>{{profile.bio}}</p>
+            <div class="interests">
+                <p><b>Interests:</b> </p>
+                {% for int in interests %}
+                    <p class="interest">{{int.interest}}</p>
+                {% endfor %}
+            </div>
+        </div>
     </div>
     <script>
         let button = document.querySelector('button');

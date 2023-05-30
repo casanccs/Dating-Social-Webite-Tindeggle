@@ -133,7 +133,7 @@ let init = async () => {
     localStream = await navigator.mediaDevices.getUserMedia({video:toVideo ,audio:false})
     document.getElementById('userVideo').srcObject = localStream
     let room_name = document.querySelector('#room_name').textContent
-    webSocket = new WebSocket('wss://' + window.location.host + '/' + room_name);
+    webSocket = new WebSocket('ws://' + window.location.host + '/' + room_name);
     webSocket.addEventListener('close', (e) => {
         console.log("Connection closed")
     })

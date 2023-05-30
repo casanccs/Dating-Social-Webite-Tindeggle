@@ -232,7 +232,7 @@ def ProfileSearchView(request):
         count = 0
     profiles = profiles.order_by('-count')
 
-    paginator = Paginator(profiles, 2) #Show only 20 profiles per
+    paginator = Paginator(profiles, 20) #Show only 20 profiles per
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     context = {
