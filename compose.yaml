@@ -3,12 +3,12 @@ services:
     build: .
     ports:
       - "8000:8000"
-    volumes: #bind mount that takes the current local directory (Which is Tindeggle on local machine) and binds it to:
+    volumes:
       - type: bind
-        source: . #Current directory
+        source: . # Current directory
         target: /backend # The container's work_dir which is /backend
       - type: volume
-        source: database
+        source: database # Name of a volume that gets created at line 14/15
         target: /db.sqlite3
 
 volumes:
