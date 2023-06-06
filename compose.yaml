@@ -4,4 +4,12 @@ services:
     ports:
       - "8000:8000"
     volumes: #bind mount that takes the current local directory (Which is Tindeggle on local machine) and binds it to:
-      - .:/backend # The container's work_dir which is /backend
+      - type: bind
+        source: . #Current directory
+        target: /backend # The container's work_dir which is /backend
+      - type: volume
+        source: database
+        target: /db.sqlite3
+
+volumes:
+  database:
