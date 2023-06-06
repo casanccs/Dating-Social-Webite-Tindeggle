@@ -1,4 +1,15 @@
-# How to Install
+# How to run with Docker-Compose
+1. In this directory, use command:  
+    $ docker compose up --build
+
+
+# How to run with Dockerfile
+1. Build the Docker Image in this directory with:  
+    $ docker build -t tindeggle .
+2. Build the Docker Container with:  
+    $ docker run -dp 8000:8000 tindeggle
+
+# How to Install Locally
 1. Create virtual environment
 2. Install dependencies using:  
     $ pip install -r requirements.txt
