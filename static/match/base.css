@@ -1,0 +1,57 @@
+@font-face {
+    font-family: 'GlobalFont'; /*a name to be used later*/
+    src: url('Inter-VariableFont_slnt\,wght.ttf'); /*URL to font*/
+}
+
+body {
+    font-family: 'GlobalFont';
+    color: black;
+    background-color: rgb(225, 225, 225);
+    margin: 0px;
+}
+
+.Navbar{
+    display: flex;
+    align-items: center;
+    border: 2px solid gray;
+    background-color: rgb(241, 241, 241);
+}
+
+.Navbar h1{
+    margin: 10px;
+}
+
+.Navbar a{
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+#search{
+    position: absolute;
+    left: 25%;
+}
+
+#chat{
+    position: absolute;
+    left: 45%;
+}
+
+#edit{
+    position: absolute;
+    left: 65%;
+}
+
+#logout{
+    position: absolute;
+    font-size: 22px;
+    color: white;
+    left: 100%;
+    transform: translate(-125%);
+    border-radius: 5px;
+    background-color: rgb(129, 23, 182);
+    padding: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}

@@ -1,0 +1,95 @@
+body {
+    background-image: url('createProfileBackground.jpg');
+    background-size: 100% 100vh;
+}
+
+.form{
+    position: relative;
+    width: 1000px;
+    left: 50%;
+    transform: translate(-50%);
+    background: rgb(25,25,25,0.7);
+    display: flex;
+    justify-items: center;
+    align-items: center;
+    border: 1px solid rgba(150,150,150,0.7);
+    border-radius: 20px;
+}
+
+.left{
+    margin-left: 50px;
+}
+
+.right{
+    margin-left: 60px;
+}
+
+.labelTag{
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.field *{
+    font-size: 25px;
+    background-color: rgba(75, 75, 75, 0.6);
+    border: 0px;
+    color: white;
+    font-family: 'GlobalFont';
+}
+
+#id_bio{
+    margin-bottom: 30px;
+    height: 280px;
+    width: 500px;
+}
+
+.title{
+    text-align: center;
+}
+
+#submit{
+    position: relative;
+    left: 50%;
+    transform: translate(-50%);
+    margin-top: 30px;
+    padding: 20px;
+    font-size: 30px;
+    cursor: pointer;
+    background: rgba(25,25,25,0.8);
+    border: 1px solid rgba(150,150,150,0.7);
+    color: white;
+    border-radius: 10px;
+    padding-left: 60px;
+    padding-right: 60px;
+}
+
+.fileButton input::file-selector-button{
+    background-color: rgba(150,150,150,0);
+    display: inline-block;
+    width: 50px;
+    color: rgba(150,150,150,0);
+    border: 0;
+}
+
+.fileButton{
+    background-color: rgba(150,150,150,0);
+    border: 0;
+}
+
+.fileButton input{
+    display: inline-block;
+    width: 150px;
+    height: 150px;
+    background-color: rgba(150,150,150,0.7);
+    border: 2px solid rgba(150,150,150,0.7);
+    color: rgba(150,150,150,0);
+    cursor: pointer;
+    border-radius: 10px;
+    margin: 5px;
+    pointer-events: all;
+    background-image: url('createPlus.png');
+    background-size: 75px 75px;
+    background-repeat:no-repeat;
+    background-position: 50% 50%;
+}
+

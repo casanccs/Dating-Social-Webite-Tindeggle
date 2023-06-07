@@ -1,0 +1,78 @@
+.profile{
+    position: relative;
+    display: flex;
+    align-items: center;
+    border: 3px solid white;
+    margin: 40px;
+}
+
+.small{
+    display: flex;
+}
+
+.small div{
+    margin-left: 50px;
+}
+
+.small h3{
+    margin: 10px;
+    text-align: center;
+}
+
+.small h4{
+    margin: 10px;
+    text-align: center;
+}
+
+.bio{
+    margin-left: 10px;
+}
+
+
+.buttons{
+    position: absolute;
+    left: 100%;
+    transform: translate(-100%);
+}
+
+.buttons div{
+    position: relative;
+    width: 280px;
+    height: 50px;
+    background-color: rgb(129, 23, 182);
+    margin: 10px;
+    color: white;
+    border-radius: 6px;
+}
+
+.buttons label{
+    position: absolute;
+    font-size: 40px;
+    left: 50%;
+    transform: translate(-50%);
+    white-space: nowrap;
+}
+
+.interests{
+    display: flex;
+    align-items: center;
+}
+
+.interests p{
+    margin-right: 50px;
+    margin-left: 20px;
+}
+
+.same {
+    color: white;
+    background-color: rgb(129, 23, 182);
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.diff {
+    color: white;
+    background-color: rgb(47, 47, 47);
+    padding: 10px;
+    border-radius: 5px;
+}

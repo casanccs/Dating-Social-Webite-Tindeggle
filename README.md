@@ -13,7 +13,7 @@
 1. Create virtual environment
 2. Install dependencies using:  
     $ pip install -r requirements.txt
-3. Run server by using this command in parent directory:  
+3. Run server by using this command in parent directory:
     $ python manage.py runserver
 # How to use
 1. Create account with profile pictures and interests.
