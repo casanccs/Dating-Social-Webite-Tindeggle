@@ -1,6 +1,8 @@
 services:
   django:
     build: .
+    env_file:
+      - .env
     ports:
       - "8000:8000"
     volumes:
@@ -10,6 +12,18 @@ services:
       - type: volume
         source: database # Name of a volume that gets created at line 14/15
         target: /db.sqlite3
+      - type: volume
+        source: static
+        target: /backend/static
+  nginx:
+    build: ./nginx
+    volumes:
+      - static:/static
+    ports:
+      - "80:80"
+    depends_on:
+      - django
 
 volumes:
   database:
+  static:
